@@ -94,6 +94,34 @@ class Host extends React.Component {
 
     const closeModal = () => this.setState({ showModal: false });
 
+    if (get(collective, 'host.id') === collective.id) {
+      return (
+        <Fragment>
+          <p>
+            <FormattedMessage
+              id="editCollective.selfHost.label"
+              defaultMessage="{type, select, COLLECTIVE {Your Collective} FUND {Your Fund}} is currently self hosted, it doesn't use a Fiscal Host."
+              values={{
+                type: collective.type,
+              }}
+            />
+          </p>
+          <p>
+            <Button bsStyle="primary" type="submit" onClick={() => this.changeHost()} className="removeHostBtn">
+              <FormattedMessage id="editCollective.selfHost.removeBtn" defaultMessage="Remove Self Hosting" />
+            </Button>
+          </p>
+          <Fineprint>
+            <FormattedMessage
+              id="editCollective.host.change.removeFirst"
+              defaultMessage="Once removed, {type, select, COLLECTIVE {your Collective} FUND {your Fund}} won't be able to accept financial contributions anymore. You will be able to apply to another Fiscal Host."
+              values={{ type: collective.type }}
+            />
+          </Fineprint>
+        </Fragment>
+      );
+    }
+
     if (get(collective, 'host.id')) {
       const name = collective.host.name;
 
@@ -288,13 +316,46 @@ class Host extends React.Component {
             <Box mb={4}>
               <h2>
                 <label htmlFor="host-radio-noHost">
-                  <FormattedMessage id="collective.edit.host.noHost.title" defaultMessage="No Fiscal Host" />
+                  <FormattedMessage id="collective.edit.host.notConfigured.title" defaultMessage="Not configured" />
                 </label>
               </h2>
               <FormattedMessage
                 id="collective.edit.host.noHost.description"
-                defaultMessage="Without a Fiscal Host, you can't collect money. You can still use other features, like editing your profile page, submitting expenses, and posting updates."
+                defaultMessage="Without a Fiscal Host or Self Hosting configured, you can't collect money. You can still use other features, like editing your profile page, submitting expenses, and posting updates."
               />
+            </Box>
+          </Flex>
+        </Option>
+
+        <Option id="selfHost">
+          <Flex>
+            <Box width="50px" mr={2}>
+              <Radio
+                id="host-radio-selfHost"
+                checked={selectedOption === 'selfHost'}
+                onChange={() => this.updateSelectedOption('selfHost')}
+                className="hostRadio"
+              />
+            </Box>
+            <Box mb={4}>
+              <h2>
+                <label htmlFor="host-radio-selfHost">
+                  <FormattedMessage id="collective.edit.host.selfHost.title" defaultMessage="Self Hosted" />
+                </label>
+              </h2>
+              <FormattedMessage
+                id="collective.edit.host.selfHost.description"
+                defaultMessage="No Fiscal Host, just connect your account to get money in and out. But we need a longer text otherwise the design doesn't work very well. It's strange really."
+              />
+              {selectedOption === 'selfHost' && LoggedInUser && (
+                <Flex justifyContent="space-between" alignItems="flex-end" mt={3}>
+                  <Box>
+                    <Button bsStyle="primary" type="submit" onClick={() => this.changeHost({ id: collective.id })}>
+                      <FormattedMessage id="host.selfHost.confirm" defaultMessage="Use Self Hosting, no Fiscal Host" />
+                    </Button>
+                  </Box>
+                </Flex>
+              )}
             </Box>
           </Flex>
         </Option>
