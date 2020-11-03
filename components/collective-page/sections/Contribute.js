@@ -339,7 +339,7 @@ class SectionContribute extends React.PureComponent {
                 </HorizontalScroller>
               </Box>
             )}
-            {hasOtherWaysToContribute && (
+            {hasOtherWaysToContribute && !parseToBoolean(getEnvVar('NEW_COLLECTIVE_NAVBAR')) && (
               <HorizontalScroller getScrollDistance={this.getContributeCardsScrollDistance}>
                 {(ref, Chevrons) => (
                   <div>
