@@ -91,13 +91,6 @@ class CreateUpdatePage extends React.Component {
 
     return (
       <div className="CreateUpdatePage">
-        <style jsx global>
-          {`
-            .CreateUpdatePage .Updates .update {
-              border-top: 1px solid #cacbcc;
-            }
-          `}
-        </style>
         <Header collective={collective} LoggedInUser={LoggedInUser} />
 
         <Body>
